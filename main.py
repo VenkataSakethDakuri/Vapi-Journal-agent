@@ -4,54 +4,48 @@ import os
 
 from dotenv import load_dotenv
 
+auth_token = VAPI_API_KEY
 
-#import the VAPI_API_KEY from the .env file
-load_dotenv()
-VAPI_API_KEY = os.getenv("VAPI_API_KEY")
-
+phone_number_id = ''
+customer_number = ""
 
 headers = {
-    'Authorization': f'Bearer {VAPI_API_KEY}',
+    'Authorization': f'Bearer {auth_token}',
+    'Content-Type': 'application/json',
 }
 
-#Creating knowledge base
-
-data_kb = {
-    "provider" : "trieve",
-    "name": "vapi",
-}
-
-requests.post('https://api.vapi.ai/knowledge-base', headers=headers, json=data_kb)
-
-
-
-
-
-
-assistant_id = os.getenv("ASSISTANT_ID")
-phone_number_id = os.getenv("PHONE_NUMBER_ID")
-customer_number = os.getenv("CUSTOMER_NUMBER")
-
+# Create the data payload for the API request
 data = {
-    
-    "assistant": {
-
-
-    }
-    
-    
-    
-    
-    
-    
-    
-    "phoneNumberId": "{phone_number_id}",
-    "customer": {
-        "number": "{customer_number}"
+    'assistant': {
+        "firstMessage": "Hey, what's up?",
+        "model": {
+            "provider": "openai",
+            "model": "gpt-3.5-turbo",
+            "messages": [
+                {
+                    "role": "system",
+                    "content": "You are an assistant."
+                }
+            ]
+        },
+        "voice": "jennifer-playht"
     },
-
+    'phoneNumberId': phone_number_id,
+    'customer': {
+        'number': customer_number,
+    },
 }
 
-response = requests.post('https://api.vapi.ai/call', headers=headers, json=data)
 
+response = requests.post(
+    'https://api.vapi.ai/call/phone', headers=headers, json=data)
+
+
+# Check if the request was successful and print the response
+if response.status_code == 201:
+    print('Call created successfully')
+    print(response.json())
+else:
+    print('Failed to create call')
+    print(response.text)
 
