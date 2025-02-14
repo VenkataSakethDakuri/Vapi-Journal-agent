@@ -78,9 +78,11 @@ call_id = create_call.json()['id']
 
 # Fetch call details using call_id
 call_details_url = f'https://api.vapi.ai/call/{call_id}'
+
+
 call_details_response = requests.get(call_details_url, headers=headers)
 
-call_details_response.json()['artifactPlan']['analysis']['summary']
+call_details_response.json()['analysis']['summary']
 
 
 
@@ -91,6 +93,8 @@ new_data_kb = {
 
     "provider": "trieve",
     "name": "vapi.ai",
+
+
 
 
 }
