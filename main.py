@@ -11,17 +11,34 @@ VAPI_API_KEY = os.getenv("VAPI_API_KEY")
 
 
 headers = {
-    'Authorization': f'Bearer {VAPI_API_KEY}',
-}
+     'Authorization': f'Bearer {VAPI_API_KEY}',
+     "Content-Type": "application/json"
+ }
 
-#Creating knowledge base
+# #Creating knowledge base
 
-data_kb = {
-    "provider" : "trieve",
-    "name": "vapi.ai",
-}
+# data_kb = {
+#     "provider" : "trieve",
+#     "name": "vapi.ai",
+# }
 
-knowledge_base = requests.post('https://api.vapi.ai/knowledge-base', headers=headers, json=data_kb)
+# knowledge_base = requests.post('https://api.vapi.ai/knowledge-base', headers=headers, json=data_kb)
+
+# Create Knowledge Base (POST /knowledge-base)
+response = requests.post(
+  "https://api.vapi.ai/knowledge-base",
+  headers={
+    "Authorization": "Bearer {VAPI_API_KEY}",
+    "Content-Type": "application/json"
+  },
+  json={
+    "provider": "trieve",
+    "name": "data_kb",
+    "searchPlan": {
+      "searchType": "bm25"
+    }
+  },
+)
 
 
 
@@ -83,6 +100,8 @@ call_details_url = f'https://api.vapi.ai/call/{call_id}'
 call_details_response = requests.get(call_details_url, headers=headers)
 
 call_details_response.json()['analysis']['summary']
+
+
 
 
 
