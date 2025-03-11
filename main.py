@@ -25,7 +25,7 @@ headers = {
 # knowledge_base = requests.post('https://api.vapi.ai/knowledge-base', headers=headers, json=data_kb)
 
 # Create Knowledge Base (POST /knowledge-base)
-response = requests.post(
+knowledge_base = requests.post(
   "https://api.vapi.ai/knowledge-base",
   headers={
     "Authorization": "Bearer {VAPI_API_KEY}",
@@ -33,12 +33,19 @@ response = requests.post(
   },
   json={
     "provider": "trieve",
+    "createPlan": {
+      "type": "import",
+      "providerId": "{DATASET_ID}"
+    },
     "name": "data_kb",
     "searchPlan": {
       "searchType": "bm25"
     }
   },
 )
+
+
+
 
 
 
@@ -99,24 +106,26 @@ call_details_url = f'https://api.vapi.ai/call/{call_id}'
 
 call_details_response = requests.get(call_details_url, headers=headers)
 
-call_details_response.json()['analysis']['summary']
+summary = call_details_response.json()['analysis']['summary']
 
 
 
 
 
 
-
-# Update knowledge base
-new_data_kb = {
-
-    "provider": "trieve",
-    "name": "vapi.ai",
+#Adding chunks to the knowledge base
+url = "https://api.trieve.ai/api/chunk"
 
 
-
-
+payload = {"chunk_html": "{summary}"}
+headers = {
+    "Authorization": "{TRIEVE_API_KEY}",
+    "TR-Dataset": "{DATASET_ID}",
+    "Content-Type": "application/json"
 }
+
+requests.request("POST", url, json=payload, headers=headers)
+
 
 
 
