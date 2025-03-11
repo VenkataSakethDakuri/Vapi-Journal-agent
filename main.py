@@ -126,16 +126,3 @@ headers = {
 
 requests.request("POST", url, json=payload, headers=headers)
 
-
-
-
-
-
-
-
-
-
-update_knowledge_base = requests.patch(f'https://api.vapi.ai/knowledge-base/{knowledge_base_id}', headers=headers, json={})
-
-
-
